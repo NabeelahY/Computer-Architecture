@@ -29,7 +29,7 @@ class CPU:
         # ]
 
         if len(sys.argv) != 2:
-            print("usage: 02-fileio02.py <filename>")
+            print("usage: ls8.py <filename>")
             sys.exit(1)
 
 
@@ -112,6 +112,10 @@ class CPU:
             elif IR == PRN:
                 print(self.reg[operand_a])
                 self.pc += 2
+
+            elif IR == MUL:
+                print(self.reg[operand_a] * self.reg[operand_b])
+                self.pc += 3
 
             elif IR == HLT:
                 running = False
