@@ -63,10 +63,10 @@ class CPU:
         print()
 
     def ram_read(self, address):
-        return self.reg[address]
+        return self.ram[address]
 
     def ram_read(self, address, value):
-        self.reg[address] = value
+        self.ram[address] = value
 
     def run(self):
         """Run the CPU."""
