@@ -10,6 +10,7 @@ class CPU:
         self.reg = [0] * 8
         self.ram = [0] * 256
         self.pc = 0
+        self.sp = 0
 
     def load(self):
         """Load a program into memory."""
@@ -96,9 +97,9 @@ class CPU:
         LDI = 0b10000010
         HLT = 0b00000001
         MUL = 0b10100010
+        PUSH = 0b01000101
+        POP = 0b01000110
 
-
-        
         running = True
 
         while running:
@@ -116,6 +117,11 @@ class CPU:
             elif IR == MUL:
                 print(self.reg[operand_a] * self.reg[operand_b])
                 self.pc += 3
+
+            elif IR == PUSH:
+                val = self.reg[operand_a]
+                self.reg -= 1
+                self.ram_write(self.reg, val)
 
             elif IR == HLT:
                 running = False
