@@ -122,6 +122,13 @@ class CPU:
                 val = self.reg[operand_a]
                 self.reg -= 1
                 self.ram_write(self.reg, val)
+                self.pc += 3
+
+            elif IR == POP:
+                val = self.reg[operand_a]
+                self.reg += 1
+                self.ram_write(self.reg, val)
+                self.pc += 3
 
             elif IR == HLT:
                 running = False
