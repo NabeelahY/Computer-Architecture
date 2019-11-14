@@ -2,9 +2,9 @@
 
 import sys
 
+
 class CPU:
     """Main CPU class."""
-
     def __init__(self):
         """Construct a new CPU."""
         self.reg = [0] * 8
@@ -33,7 +33,6 @@ class CPU:
             print("usage: ls8.py <filename>")
             sys.exit(1)
 
-
         try:
             with open(sys.argv[1]) as file:
                 for line in file:
@@ -55,7 +54,6 @@ class CPU:
             self.ram[address] = instruction
             address += 1
 
-
     def alu(self, op, reg_a, reg_b):
         """ALU operations."""
 
@@ -71,14 +69,15 @@ class CPU:
         from run() if you need help debugging.
         """
 
-        print(f"TRACE: %02X | %02X %02X %02X |" % (
-            self.pc,
-            #self.fl,
-            #self.ie,
-            self.ram_read(self.pc),
-            self.ram_read(self.pc + 1),
-            self.ram_read(self.pc + 2)
-        ), end='')
+        print(
+            f"TRACE: %02X | %02X %02X %02X |" % (
+                self.pc,
+                #self.fl,
+                #self.ie,
+                self.ram_read(self.pc),
+                self.ram_read(self.pc + 1),
+                self.ram_read(self.pc + 2)),
+            end='')
 
         for i in range(8):
             print(" %02X" % self.reg[i], end='')
@@ -99,6 +98,8 @@ class CPU:
         MUL = 0b10100010
         PUSH = 0b01000101
         POP = 0b01000110
+        CALL = 0b01010000
+        RET = 0b00010001
 
         running = True
 
@@ -125,12 +126,23 @@ class CPU:
                 self.pc += 2
 
             elif IR == POP:
-               val = self.ram_read(self.reg[self.sp])
-               self.reg[operand_a] = val
-               self.reg[self.sp] += 1
-               self.pc += 2
+                val = self.ram_read(self.reg[self.sp])
+                self.reg[operand_a] = val
+                self.reg[self.sp] += 1
+                self.pc += 2
+
+            elif IR == CALL:
+                print(self.reg)
+                print(self.sp)
+                self.reg[self.sp] -= 1
+                self.ram_write(self.reg[self.sp], self.pc + 2)
+                self.pc = self.reg[operand_a]
+
+            elif IR == RET:
+                # print(self.reg)
+                # print(self.sp)
+                self.pc = self.ram_read(self.reg[self.sp])
+                self.reg[self.sp] += 1
 
             elif IR == HLT:
                 running = False
-
-
